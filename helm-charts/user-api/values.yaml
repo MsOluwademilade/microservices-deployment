@@ -1,0 +1,8 @@
+replicaCount: 1
+image:
+  repository: <aws_account_id>.dkr.ecr.<region>.amazonaws.com/user-api
+  tag: latest
+  pullPolicy: IfNotPresent
+service:
+  type: ClusterIP
+  port: 5001
