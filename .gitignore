@@ -30,6 +30,5 @@ docker-compose.yml
 *.chart/
 
 # Ignore CI/CD logs
-.circleci/
 *.log
 *.tmp

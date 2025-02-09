@@ -1,0 +1,30 @@
+version: 2.1
+jobs:
+  build-and-push:
+    docker:
+      - image: cimg/python:3.9
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Build and Push User API
+          command: |
+            docker build -t user-api:latest ./user_api
+            docker tag user-api:latest <aws_account_id>.dkr.ecr.<region>.amazonaws.com/user-api:latest
+            docker push <aws_account_id>.dkr.ecr.<region>.amazonaws.com/user-api:latest
+  deploy:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - run:
+          name: Deploy with Helm
+          command: |
+            helm upgrade --install user-api ./helm-charts/user-api
+workflows:
+  build-deploy:
+    jobs:
+      - build-and-push
+      - deploy:
+          requires:
+            - build-and-push
